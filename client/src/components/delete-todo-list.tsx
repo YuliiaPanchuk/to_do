@@ -1,13 +1,20 @@
 import React from 'react';
 
-export function DeleteToDoList() {
-  function handleDelete() {
-    fetch('http://localhost:3001/delete', {});
+interface DeleteToDoListProps {
+  onSuccess: () => void;
+  id: number;
+}
+
+export function DeleteToDoList({ onSuccess, id }: DeleteToDoListProps) {
+  function handleDeleteToDo() {
+    fetch(`http://localhost:3001/list/${id}`, {
+      method: 'DELETE',
+    }).then(onSuccess);
   }
 
   return (
     <>
-      <button>Delete</button>
+      <button onClick={handleDeleteToDo}>Delete</button>
     </>
   );
 }

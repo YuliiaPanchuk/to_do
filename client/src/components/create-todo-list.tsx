@@ -4,7 +4,7 @@ export function CreateToDoList() {
   const [toDo, setToDo] = useState(''); // when user inserts todo list
 
   function createTodoList() {
-    fetch('http://localhost:3001/create', {
+    fetch('http://localhost:3001/list', {
       method: 'POST',
       body: JSON.stringify({
         list_name: toDo,

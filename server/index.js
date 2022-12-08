@@ -22,9 +22,14 @@ con.connect((err) => {
   console.log('Connected');
 });
 
-// Create todo list
-app.post('/create', (req, res) => {
+// Create list (To do, in progress, done)
+app.post('/list', (req, res) => {
   const list_name = req.body.list_name;
+
+  if (list_name === "" || typeof (list_name) !== "string") {
+    res.send("Input cannot be empty")
+    return
+  }
 
   con.query('INSERT INTO todo_list SET ?', { list_name }, (err, result) => {
     if (err) {
@@ -40,8 +45,8 @@ app.post('/create', (req, res) => {
   });
 });
 
-// Show all todo lists
-app.get('/lists', (req, res) => {
+// Show all lists
+app.get('/list', (req, res) => {
   con.query('SELECT * FROM todo_list', (err, result) => {
     if (err) {
       res.status(500).json({
@@ -57,8 +62,8 @@ app.get('/lists', (req, res) => {
 });
 
 // Update todo_list name
-app.put('/update', (req, res) => {
-  const id = req.body.id;
+app.put('/list/:id', (req, res) => {
+  const id = req.params.id;
   const name = req.body.list_name;
 
   con.query('UPDATE todo_list SET list_name = ? WHERE id = ?', [name, id], (err, _result) => {
@@ -76,8 +81,9 @@ app.put('/update', (req, res) => {
 });
 
 // Delete todo_list
-app.delete('/delete', (req, res) => {
-  const id = req.body.id
+app.delete('/list/:id', (req, res) => {
+  const id = req.params.id
+
   con.query('DELETE FROM todo_list WHERE id = ?', [id], (err, result) => {
     if (err) {
       res.status(500).json({
@@ -92,8 +98,9 @@ app.delete('/delete', (req, res) => {
   });
 });
 
-// Create to-do task
-app.post('/create_todo', (req, res) => {
+//
+// Create to-do TASK
+app.post('/list/:id/task/', (req, res) => {
   const todo_name = req.body.task_name;
   const completed = req.body.completed;
   const todo_id = req.body.todo_id
@@ -124,8 +131,8 @@ app.post('/create_todo', (req, res) => {
   });
 });
 
-// Display all todo tasks
-app.get('/todos', (req, res) => {
+// Display all tasks
+app.get('/list/task', (req, res) => {
   con.query('SELECT * FROM task', (err, result) => {
     if (err) {
       res.status(500).json({
@@ -143,7 +150,7 @@ app.get('/todos', (req, res) => {
 });
 
 // Update todo
-app.put('/update/todo', (req, res) => {
+app.put('/list/:id/task/:id', (req, res) => {
   const task_name = req.body.task_name
   const id = req.body.id;
   const completed = req.body.completed;
@@ -166,8 +173,8 @@ app.put('/update/todo', (req, res) => {
   });
 });
 
-// Delete todo
-app.delete('/delete/todo', (req, res) => {
+// Delete specific task
+app.delete('/list/:id/task/:id', (req, res) => {
   const id = req.body.id;
 
   con.query('DELETE FROM task WHERE id = ?', id, (err, result) => {
