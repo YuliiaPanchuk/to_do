@@ -1,0 +1,12 @@
+.wrapper {
+  border: 2px solid gray;
+  display: flex;
+}
+
+.createTodoWrapper {
+  border: 1px solid red
+}
+
+.deleteTodoWrapper {
+  border: 1px solid blue;
+}

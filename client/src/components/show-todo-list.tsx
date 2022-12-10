@@ -9,7 +9,7 @@ interface DisplayTodoListProps {
 
 export function DisplayTodoList({ list, loading, onSuccess }: DisplayTodoListProps) {
   return (
-    <div>
+    <div className="showTodoWrapper">
       {loading && <p>A moment please...</p>}
       {list.map((todo) => (
         <div key={todo.id}>

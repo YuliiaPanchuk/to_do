@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import '../App.css';
 
 export function CreateToDoList() {
   const [toDo, setToDo] = useState(''); // when user inserts todo list
@@ -23,17 +24,16 @@ export function CreateToDoList() {
   console.log({ createTodoList });
 
   return (
-    <>
+    <div className="createTodoWrapper">
       <div>
-        <label>Create to do list</label>
         <input
           type="text"
-          placeholder="Insert to do"
+          placeholder="Insert to do status"
           value={toDo} // saving user value to todo state
           onChange={(e) => setToDo(e.target.value)}
         />
       </div>
-      <button onClick={createTodoList}>Create to do</button>
-    </>
+      <button onClick={createTodoList}>Create to do status</button>
+    </div>
   );
 }

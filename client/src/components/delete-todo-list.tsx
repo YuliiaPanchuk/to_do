@@ -13,8 +13,8 @@ export function DeleteToDoList({ onSuccess, id }: DeleteToDoListProps) {
   }
 
   return (
-    <>
+    <div className="deleteTodoWrapper">
       <button onClick={handleDeleteToDo}>Delete</button>
-    </>
+    </div>
   );
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { CreateToDoList } from './components/create-todo-list';
 import { DisplayTodoList } from './components/show-todo-list';
+import './App.css';
 
 export default function App() {
   const [list, setList] = useState<any[]>([]); // display all todo list
@@ -30,10 +31,10 @@ export default function App() {
   }, []);
 
   return (
-    <>
+    <div className="wrapper">
       <CreateToDoList />
       <DisplayTodoList list={list} loading={loading} onSuccess={fetchLists} />
-    </>
+    </div>
   );
 }
 
