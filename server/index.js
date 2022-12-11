@@ -26,9 +26,9 @@ con.connect((err) => {
 app.post('/list', (req, res) => {
   const list_name = req.body.list_name;
 
-  if (list_name === "" || typeof (list_name) !== "string") {
-    res.send("Input cannot be empty")
-    return
+  if (list_name === '' || typeof list_name !== 'string') {
+    res.send('Input cannot be empty');
+    return;
   }
 
   con.query('INSERT INTO todo_list SET ?', { list_name }, (err, result) => {
@@ -39,8 +39,8 @@ app.post('/list', (req, res) => {
       res.status(200).json({
         list_name: list_name,
         id: result.insertId,
-      })
-      console.log("Created todo");
+      });
+      console.log('Created todo');
     }
   });
 });
@@ -54,9 +54,35 @@ app.get('/list', (req, res) => {
       });
       console.log('Error: ', err);
     } else {
-      res.status(200).json({
-        result
-      });
+      if (result.length === 0) {
+        res.status(200).json({
+          result: [],
+        });
+        return;
+      }
+
+      con.query(
+        'SELECT * FROM task WHERE todo_id IN (?)',
+        [result.map((item) => item.id)],
+        (error, tasks) => {
+          if (error) {
+            res.status(500).json({
+              message: `An error occured: ${error}`,
+            });
+          } else {
+            res.status(200).json({
+              result: result.map((list) => ({
+                id: list.id,
+                name: list.list_name,
+                tasks: tasks.filter((task) => task.todo_id === list.id).map((task) => ({
+                  id: task.id,
+                  name: task.task_name,
+                })),
+              })),
+            });
+          }
+        },
+      );
     }
   });
 });
@@ -74,7 +100,7 @@ app.put('/list/:id', (req, res) => {
     } else {
       res.status(200).json({
         id,
-        name
+        name,
       });
     }
   });
@@ -82,7 +108,7 @@ app.put('/list/:id', (req, res) => {
 
 // Delete todo_list
 app.delete('/list/:id', (req, res) => {
-  const id = req.params.id
+  const id = req.params.id;
 
   con.query('DELETE FROM todo_list WHERE id = ?', [id], (err, result) => {
     if (err) {
@@ -92,7 +118,7 @@ app.delete('/list/:id', (req, res) => {
       console.log('Error: ', err);
     } else {
       res.status(200).send();
-      console.log("Deleted id: ", id);
+      console.log('Deleted id: ', id);
       return;
     }
   });
@@ -102,17 +128,9 @@ app.delete('/list/:id', (req, res) => {
 // Create to-do TASK
 app.post('/list/:id/task/', (req, res) => {
   const todo_name = req.body.task_name;
-  const completed = req.body.completed;
-  const todo_id = req.body.todo_id
+  const todo_id = req.params.id;
 
-  if (typeof (completed) !== 'boolean') {
-    console.error("Wrong type of input");
-    res.status(400)
-    res.send("Wrong type of input")
-    return
-  }
-
-  const sql = `INSERT INTO task(task_name, completed, todo_id) VALUES('${todo_name}, ${completed}, ${todo_id}')`;
+  const sql = `INSERT INTO task(task_name, todo_id) VALUES('${todo_name}', ${todo_id})`;
   con.query(sql, (err, _result) => {
     if (err) {
       res.status(500).json({
@@ -123,8 +141,7 @@ app.post('/list/:id/task/', (req, res) => {
     } else {
       res.status(200).json({
         todo_name: todo_name,
-        completed: completed,
-        todo_id: todo_id
+        todo_id: todo_id,
       });
       return;
     }
@@ -142,7 +159,7 @@ app.get('/list/task', (req, res) => {
       console.log('Error:', err);
     } else {
       res.status(200).json({
-        result
+        result,
       });
       return;
     }
@@ -151,11 +168,10 @@ app.get('/list/task', (req, res) => {
 
 // Update todo
 app.put('/list/:id/task/:id', (req, res) => {
-  const task_name = req.body.task_name
+  const task_name = req.body.task_name;
   const id = req.body.id;
-  const completed = req.body.completed;
 
-  con.query('UPDATE task SET completed = ? AND task_name = ? WHERE id = ?', [completed, task_name, id], (err, result) => {
+  con.query('UPDATE task SET task_name = ? WHERE id = ?', [task_name, id], (err, result) => {
     if (err) {
       res.status(500).json({
         status: '!OK',
@@ -164,7 +180,6 @@ app.put('/list/:id/task/:id', (req, res) => {
       console.log('Error:', err);
     } else {
       res.status(200).json({
-        completed,
         task_name,
         id,
       });
@@ -186,7 +201,7 @@ app.delete('/list/:id/task/:id', (req, res) => {
       console.log('Error: ', err);
     } else {
       res.status(200).send();
-      console.log("Deleted id: ", id);
+      console.log('Deleted id: ', id);
       return;
     }
   });
