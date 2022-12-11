@@ -14,7 +14,9 @@ export function DeleteToDoList({ onSuccess, id }: DeleteToDoListProps) {
 
   return (
     <div className="deleteTodoWrapper">
-      <button onClick={handleDeleteToDo}>Delete</button>
+      <button onClick={handleDeleteToDo} className="deleteToDoListButton">
+        <i className="fa-regular fa-trash-can" />
+      </button>
     </div>
   );
 }
