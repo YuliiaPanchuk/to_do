@@ -33,17 +33,7 @@ export default function App() {
   return (
     <div className="wrapper">
       <CreateToDoList />
-      <DisplayTodoList list={list} loading={loading} onSuccess={fetchLists} />
+      <DisplayTodoList lists={list} loading={loading} onSuccess={fetchLists} />
     </div>
   );
 }
-
-// clear the input field after submit btn is pressed
-//
-// delete all to do list
-// delete specified to do
-//
-// edit each to do list
-// edit each to do
-//
-//
