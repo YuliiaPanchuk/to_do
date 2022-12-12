@@ -136,7 +136,7 @@ app.post('/list/:id/task/', (request, response) => {
   const todo_name = request.body.task_name;
   const todo_id = request.params.id;
 
-  const sql = `INSERT INTO task(task_name, todo_id) VALUES('${todo_name}', ${todo_id})`;
+  const sql = `INSERT INTO task(task_name, todo_id) VALUES('${todo_name}', ${todo_id})`; // task_name or todo_name???
   connection.query(sql, (error, _result) => {
     if (error) {
       response.status(500).json({
@@ -216,6 +216,22 @@ app.delete('/list/:id/task/:id', (request, response) => {
     }
   });
 });
+
+/*SUBTASKS*/
+
+/*
+
+app.post("/list/:list_id/task/:task_id/subtask", (request, response) => {
+  const sub_task_name = request.params.sub_task_name
+  const sub_task_id = request.params.id
+
+
+  connection.query('INSERT INTO sub_task ')
+})
+
+*/
+
+
 
 app.listen(PORT, () => {
   console.log(`Assignment project listening on port ${PORT}`);

@@ -21,8 +21,6 @@ export function CreateToDoList() {
       .catch((err) => alert(`Something went wrong to create to do list ${err}`));
   }
 
-  console.log({ createTodoList });
-
   return (
     <div className="createTodoWrapper">
       <div>

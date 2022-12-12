@@ -6,7 +6,7 @@ interface CreateTodoTaskProps {
 
 export function CreateTodoTask({ list_id }: CreateTodoTaskProps) {
   const [task, setTask] = useState('');
-  const [taskId, setTaskId] = useState('');
+  const [taskId, _setTaskId] = useState('');
 
   function fetchTasks() {
     fetch(`http://localhost:3001/list/${list_id}/task/`, {
@@ -19,8 +19,6 @@ export function CreateTodoTask({ list_id }: CreateTodoTaskProps) {
         'Content-type': 'application/json; charset=UTF-8',
       },
     }).then((response) => response.json());
-
-    console.log({ fetchTasks });
   }
 
   return (
