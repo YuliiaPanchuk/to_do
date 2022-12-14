@@ -2,6 +2,7 @@ const express = require('express');
 const fs = require('fs');
 const mysql = require('mysql');
 const cors = require('cors');
+const util = require('util');
 
 const app = express();
 app.use(express.json());
@@ -16,6 +17,8 @@ const connection = mysql.createConnection({
   password: 'root',
   database: 'todo',
 });
+
+const execQuery = util.promisify(connection.query.bind(connection));
 
 connection.connect((error) => {
   if (error) throw error;
@@ -46,46 +49,37 @@ app.post('/list', (request, response) => {
 });
 
 // Show all lists
-app.get('/list', (request, response) => {
-  connection.query('SELECT * FROM todo_list', (error, result) => {
-    if (error) {
-      response.status(500).json({
-        message: 'Something went wrong',
-      });
-      console.log('Error: ', error);
-    } else {
-      if (result.length === 0) {
-        response.status(200).json({
-          result: [],
-        });
-        return;
-      }
+app.get('/list', async (request, response) => {
+  const lists = await execQuery('SELECT * FROM todo_list');
 
-      connection.query(
-        'SELECT * FROM task WHERE todo_id IN (?)',
-        [result.map((item) => item.id)],
-        (error, tasks) => {
-          if (error) {
-            response.status(500).json({
-              message: `An error occured: ${error}`,
-            });
-          } else {
-            response.status(200).json({
-              result: result.map((list) => ({
-                id: list.id,
-                name: list.list_name,
-                tasks: tasks
-                  .filter((task) => task.todo_id === list.id)
-                  .map((task) => ({
-                    id: task.id,
-                    name: task.task_name,
-                  })),
-              })),
-            });
-          }
-        },
-      );
-    }
+  if (lists.length === 0) {
+    response.status(200).json({
+      result: [],
+    });
+    return;
+  }
+
+  const lists_id = lists.map((list) => list.id);
+  const tasks = await execQuery('SELECT * FROM task WHERE todo_id IN (?)', [lists_id]);
+
+  const tasks_id = tasks.map((task) => task.id);
+  const subtasks =
+    tasks_id.length > 0
+      ? await execQuery('SELECT * FROM sub_task WHERE task_id IN (?)', [tasks_id])
+      : [];
+
+  response.status(200).json({
+    result: lists.map((list) => ({
+      id: list.id,
+      name: list.list_name,
+      tasks: tasks
+        .filter((task) => task.todo_id === list.id)
+        .map((task) => ({
+          id: task.id,
+          name: task.task_name,
+          subtasks: subtasks.filter((subtask) => subtask.task_id === task.id),
+        })),
+    })),
   });
 });
 
@@ -136,6 +130,11 @@ app.post('/list/:id/task/', (request, response) => {
   const todo_name = request.body.task_name;
   const todo_id = request.params.id;
 
+  if (todo_name === '') {
+    response.send('The field cannot be empty!');
+    return;
+  }
+
   const sql = `INSERT INTO task(task_name, todo_id) VALUES('${todo_name}', ${todo_id})`; // task_name or todo_name???
   connection.query(sql, (error, _result) => {
     if (error) {
@@ -173,8 +172,8 @@ app.get('/list/task', (request, response) => {
 });
 
 // Update todo
-app.put('/list/:id/task/:id', (request, response) => {
-  const task_name = request.params.task_name;
+app.put('/task/:id', (request, response) => {
+  const task_name = request.body.task_name;
   const id = request.params.id;
 
   connection.query(
@@ -217,21 +216,59 @@ app.delete('/list/:id/task/:id', (request, response) => {
   });
 });
 
-/*SUBTASKS*/
+/*Create SUBTASKS*/
+app.post('/task/:task_id/subtask', (request, response) => {
+  const sub_task_name = request.body.sub_task_name;
+  const task_id = request.params.task_id;
 
-/*
+  connection.query('INSERT INTO sub_task SET ?', { sub_task_name, task_id }, (error, result) => {
+    if (error) {
+      console.log(error);
+      response.status(500).json();
+    } else {
+      response.status(200).json({
+        sub_task_name: sub_task_name,
+        task_id: task_id,
+      });
+      console.log('Created sub task');
+    }
+  });
+});
 
-app.post("/list/:list_id/task/:task_id/subtask", (request, response) => {
-  const sub_task_name = request.params.sub_task_name
-  const sub_task_id = request.params.id
+//Display all subtasks
+app.get('/task/subtask', (request, response) => {
+  connection.query('SELECT * FROM sub_task', (error, result) => {
+    if (error) {
+      response.status(500).json({
+        status: '!OK',
+        message: 'Something went wrong',
+      });
+      console.log('Error', error);
+    } else {
+      response.status(200).json({
+        result,
+      });
+      return;
+    }
+  });
+});
 
+app.delete('/subtask/:id', (request, response) => {
+  const id = request.params.id;
 
-  connection.query('INSERT INTO sub_task ')
-})
-
-*/
-
-
+  connection.query('DELETE FROM sub_task WHERE id = ?', [id], (error, result) => {
+    if (error) {
+      response.status(500).json({
+        message: 'Something went wrong',
+      });
+      console.log('Error: ', error);
+    } else {
+      response.status(200).send();
+      console.log('Deleted id: ', id);
+      return;
+    }
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`Assignment project listening on port ${PORT}`);
