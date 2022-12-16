@@ -5,7 +5,7 @@ import { DisplayTodoList } from './components/show-todo-list';
 export default function App() {
   const [list, setList] = useState<any[]>([]); // display all todo list
   const [loading, setLoading] = useState(false);
-  const [subtask, setSubtask] = useState();
+  const [subtask, setSubtask] = useState<any[]>([]);
 
   function fetchLists() {
     fetch('http://localhost:3001/list', {
@@ -47,10 +47,10 @@ export default function App() {
   }, []);
 
   return (
-    <div className="container mx-auto bg-gray-200 rounded-xl shadow border p-8 m-10">
+    <div className="container mx-auto p-8 m-10">
       <div className="border-b border-indigo-500">All your todos are here</div>
       <CreateToDoList />
-      <DisplayTodoList lists={list} loading={loading} onSuccess={fetchLists} />
+      <DisplayTodoList lists={list} loading={loading} onSuccess={fetchLists} subtasks={subtask} />
     </div>
   );
 }

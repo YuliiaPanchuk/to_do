@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import '../App.css';
 
 export function CreateToDoList() {
   const [toDo, setToDo] = useState(''); // when user inserts todo list
@@ -15,23 +14,26 @@ export function CreateToDoList() {
       },
     })
       .then((response) => response.json())
-      .then((data) => {
-        setToDo(data.list_name);
+      .then(() => {
+        setToDo('');
       })
       .catch((err) => alert(`Something went wrong to create to do list ${err}`));
   }
 
   return (
-    <div className="createTodoWrapper">
-      <div>
+    <div className="flex my-4">
+      <div className="mr-2">
         <input
           type="text"
-          placeholder="Insert to do status"
+          placeholder="Insert status property"
           value={toDo} // saving user value to todo state
           onChange={(e) => setToDo(e.target.value)}
         />
       </div>
-      <button onClick={createTodoList}>Create to do status</button>
+      <button onClick={createTodoList}>
+        <i className="fa-regular fa-plus pr-0.5" />
+        New
+      </button>
     </div>
   );
 }
