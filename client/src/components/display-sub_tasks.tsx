@@ -10,9 +10,9 @@ export function DisplaySubtasks({ subtasks, onDelete }: DisplaySubtasksProps) {
   return (
     <div>
       {subtasks.map((subtask) => (
-        <div key={subtask.task_id}>
-          <input className="subtaskName" type="text" value={subtask.sub_task_name} />
+        <div key={subtask.id} className="flex">
           <DeleteSubtask onDelete={onDelete} id={subtask.id} />
+          <input type="text" value={subtask.sub_task_name} readOnly={true} />
         </div>
       ))}
     </div>

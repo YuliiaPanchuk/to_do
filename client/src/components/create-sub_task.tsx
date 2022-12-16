@@ -20,15 +20,15 @@ export function CreateSubtask({ task_id }: CreateSubtaskProps) {
   }
 
   return (
-    <div className="my-2">
-      <input
-        type="text"
-        value={subtask}
-        onChange={(e) => {
-          setSubtask(e.target.value);
-        }}
-      />
-      <button onClick={fetchSubtasks}>Add subtask</button>
-    </div>
+    <input
+      className="my-2 pl-0.5"
+      placeholder="Add subtask"
+      type="text"
+      value={subtask}
+      onChange={(e) => {
+        setSubtask(e.target.value);
+      }}
+      onBlur={fetchSubtasks}
+    />
   );
 }

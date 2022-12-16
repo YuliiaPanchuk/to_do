@@ -24,16 +24,13 @@ export function CreateTodoTask({ list_id }: CreateTodoTaskProps) {
   return (
     <div className="flex">
       <input
-        className="mr-2 min-w-[200px]"
+        className="mr-2 min-w-[200px] pl-0.5"
         type="text"
-        placeholder="Task name"
+        placeholder="+ New"
         value={task}
         onChange={(e) => setTask(e.target.value)}
+        onBlur={fetchTasks}
       />
-      <button onClick={fetchTasks}>
-        <i className="fa-regular fa-plus pr-0.5" />
-        New
-      </button>
     </div>
   );
 }
