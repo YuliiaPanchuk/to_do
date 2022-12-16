@@ -20,7 +20,7 @@ export function CreateSubtask({ task_id }: CreateSubtaskProps) {
   }
 
   return (
-    <div>
+    <div className="my-2">
       <input
         type="text"
         value={subtask}

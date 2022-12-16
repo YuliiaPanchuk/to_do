@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { CreateSubtask } from './create-sub_task';
+import { DisplaySubtasks } from './display-sub_tasks';
 
 interface TaskCardProps {
   task: any;
+  onDelete: () => void;
+  subtasks: any[];
 }
 
-export function TaskCard({ task }: TaskCardProps) {
+export function TaskCard({ task, onDelete, subtasks }: TaskCardProps) {
   const [tempTask, setTempTask] = useState<string>(task.name || '');
 
   function editTask() {
@@ -23,10 +26,10 @@ export function TaskCard({ task }: TaskCardProps) {
   }
 
   return (
-    <div className="taskNameContainer">
+    <div className="flex flex-col rounded-xl shadow border p-8 my-6">
       <input
+        className="w-40 font-semibold bg-transparent"
         type="text"
-        className="taskNameWrapper"
         value={tempTask}
         placeholder={task.name}
         onChange={(e) => {
@@ -34,6 +37,7 @@ export function TaskCard({ task }: TaskCardProps) {
         }}
         onBlur={editTask}
       />
+      <DisplaySubtasks subtasks={task.subtasks} onDelete={onDelete} />
       <CreateSubtask task_id={task.id} />
     </div>
   );

@@ -14,7 +14,7 @@ export function DeleteSubtask({ onDelete, id }: DeleteSubtaskProps) {
 
   return (
     <div>
-      <button onClick={handleDeleteSubtask}>
+      <button onClick={handleDeleteSubtask} className="mr-2">
         <i className="fa-regular fa-trash-can" />
       </button>
     </div>
