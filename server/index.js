@@ -179,7 +179,7 @@ app.put('/task/:id', (request, response) => {
   connection.query(
     'UPDATE task SET task_name = ? WHERE id = ?',
     [task_name, id],
-    (error, result) => {
+    (error, _result) => {
       if (error) {
         response.status(500).json({
           status: '!OK',
@@ -221,6 +221,11 @@ app.post('/task/:task_id/subtask', (request, response) => {
   const sub_task_name = request.body.sub_task_name;
   const task_id = request.params.task_id;
 
+  if (sub_task_name === "") {
+    response.send("The field cannot be empty")
+    return
+  }
+
   connection.query('INSERT INTO sub_task SET ?', { sub_task_name, task_id }, (error, result) => {
     if (error) {
       console.log(error);
@@ -257,15 +262,18 @@ app.delete('/subtask/:id', (request, response) => {
   const id = request.params.id;
 
   connection.query('DELETE FROM sub_task WHERE id = ?', [id], (error, result) => {
+    console.log(result);
     if (error) {
       response.status(500).json({
         message: 'Something went wrong',
       });
       console.log('Error: ', error);
-    } else {
-      response.status(200).send();
+    } else if (result.affectedRows === 0) {
+      response.status(404).json("Not deleted")
+    }
+    else {
+      response.status(200).json();
       console.log('Deleted id: ', id);
-      return;
     }
   });
 });
