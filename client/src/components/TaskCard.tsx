@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { CreateSubtask } from './create-sub_task';
 import { DisplaySubtasks } from './display-sub_tasks';
+import Draggable, { DraggableCore } from 'react-draggable';
 
 interface TaskCardProps {
   task: any;
@@ -26,19 +27,21 @@ export function TaskCard({ task, onDelete, subtasks }: TaskCardProps) {
   }
 
   return (
-    <div className="flex flex-col rounded-xl shadow border p-8 my-6">
-      <input
-        className="w-40 font-semibold bg-transparent"
-        type="text"
-        value={tempTask}
-        placeholder={task.name}
-        onChange={(e) => {
-          setTempTask(e.target.value);
-        }}
-        onBlur={editTask}
-      />
-      <DisplaySubtasks subtasks={task.subtasks} onDelete={onDelete} />
-      <CreateSubtask task_id={task.id} />
-    </div>
+    <Draggable>
+      <div className="flex flex-col rounded-xl shadow border p-8 my-6">
+        <input
+          className="w-40 font-semibold bg-transparent"
+          type="text"
+          value={tempTask}
+          placeholder={task.name}
+          onChange={(e) => {
+            setTempTask(e.target.value);
+          }}
+          onBlur={editTask}
+        />
+        <DisplaySubtasks subtasks={task.subtasks} onDelete={onDelete} />
+        <CreateSubtask task_id={task.id} />
+      </div>
+    </Draggable>
   );
 }
