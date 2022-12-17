@@ -16,7 +16,7 @@ export function DisplayTodoList({ lists, loading, onSuccess, subtasks }: Display
       {loading && <p>A moment please...</p>}
 
       {lists.map((list) => (
-        <div key={list.id} className="min-w-[350px]  m-2">
+        <div key={list.id} className="min-w-[300px]  m-2">
           <div className="flex my-1 ">
             <p className="mr-1 font-bold">{list.name}</p>
             <DeleteToDoList onSuccess={onSuccess} id={list.id} />

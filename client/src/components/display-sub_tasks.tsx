@@ -8,7 +8,7 @@ interface DisplaySubtasksProps {
 
 export function DisplaySubtasks({ subtasks, onDelete }: DisplaySubtasksProps) {
   return (
-    <div>
+    <div className="my-2">
       {subtasks.map((subtask) => (
         <div key={subtask.id} className="flex">
           <DeleteSubtask onDelete={onDelete} id={subtask.id} />
