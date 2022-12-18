@@ -1,22 +1,32 @@
 import React, { useState } from 'react';
+import { useDrag } from 'react-dnd';
+import { StatusItem, TaskItem } from '../types';
 import { CreateSubtask } from './create-sub_task';
 import { DisplaySubtasks } from './display-sub_tasks';
-import Draggable, { DraggableCore } from 'react-draggable';
 
 interface TaskCardProps {
-  task: any;
-  onDelete: () => void;
-  subtasks: any[];
+  task: TaskItem;
 }
 
-export function TaskCard({ task, onDelete, subtasks }: TaskCardProps) {
+export function TaskCard({ task }: TaskCardProps) {
   const [tempTask, setTempTask] = useState<string>(task.name || '');
+  const [, drag] = useDrag(() => ({
+    type: 'task',
+    end: (item, monitor) => {
+      const dropResult = monitor.getDropResult<StatusItem>();
 
-  function editTask() {
+      if (item && dropResult) {
+        editTask(dropResult.id);
+      }
+    },
+  }));
+
+  function editTask(status_list_id: TaskItem['status_list_id']) {
     fetch(`http://localhost:3001/task/${task.id}`, {
       method: 'PUT',
       body: JSON.stringify({
         task_name: tempTask,
+        status_list_id,
       }),
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
@@ -27,21 +37,23 @@ export function TaskCard({ task, onDelete, subtasks }: TaskCardProps) {
   }
 
   return (
-    <Draggable>
-      <div className="flex flex-col rounded-xl shadow border p-8 my-6">
-        <input
-          className="w-40 font-semibold bg-transparent"
-          type="text"
-          value={tempTask}
-          placeholder={task.name}
-          onChange={(e) => {
-            setTempTask(e.target.value);
-          }}
-          onBlur={editTask}
-        />
-        <DisplaySubtasks subtasks={task.subtasks} onDelete={onDelete} />
-        <CreateSubtask task_id={task.id} />
+    <div className="flex flex-col rounded-xl shadow border p-3 my-6 " ref={drag}>
+      <div>
+        <i className="fa-solid fa-grip handle cursor-grab active:cursor-grabbing my-3 " />
       </div>
-    </Draggable>
+
+      <input
+        className="w-40 text-lg bg-transparent handle"
+        type="text"
+        value={tempTask}
+        placeholder={task.name}
+        onChange={(e) => {
+          setTempTask(e.target.value);
+        }}
+        onBlur={() => editTask(task.status_list_id)}
+      />
+      <DisplaySubtasks subtasks={task.subtasks} />
+      <CreateSubtask task_id={task.id} />
+    </div>
   );
 }

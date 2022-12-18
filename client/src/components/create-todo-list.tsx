@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
+import { useListContext } from '../context/ListContext';
 
 export function CreateToDoList() {
   const [toDo, setToDo] = useState(''); // when user inserts todo list
+  const { fetchLists } = useListContext();
 
   function createTodoList() {
     fetch('http://localhost:3001/list', {
       method: 'POST',
       body: JSON.stringify({
-        list_name: toDo,
+        status_name: toDo,
       }),
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
@@ -16,6 +18,7 @@ export function CreateToDoList() {
       .then((response) => response.json())
       .then(() => {
         setToDo('');
+        fetchLists();
       })
       .catch((err) => alert(`Something went wrong to create to do list ${err}`));
   }
