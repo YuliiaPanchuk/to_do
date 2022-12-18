@@ -27,20 +27,20 @@ connection.connect((error) => {
 
 // Create list (To do, in progress, done)
 app.post('/list', (request, response) => {
-  const list_name = request.body.list_name;
+  const status_name = request.body.status_name;
 
-  if (list_name === '' || typeof list_name !== 'string') {
+  if (status_name === '' || typeof status_name !== 'string') {
     response.send('Input cannot be empty');
     return;
   }
 
-  connection.query('INSERT INTO todo_list SET ?', { list_name }, (error, result) => {
+  connection.query('INSERT INTO status_list SET ?', { status_name }, (error, result) => {
     if (error) {
       console.error(error);
       response.status(500).json();
     } else {
       response.status(200).json({
-        list_name: list_name,
+        status_name: status_name,
         id: result.insertId,
       });
       console.log('Created todo');
@@ -50,7 +50,7 @@ app.post('/list', (request, response) => {
 
 // Show all lists
 app.get('/list', async (request, response) => {
-  const lists = await execQuery('SELECT * FROM todo_list');
+  const lists = await execQuery('SELECT * FROM status_list');
 
   if (lists.length === 0) {
     response.status(200).json({
@@ -71,11 +71,12 @@ app.get('/list', async (request, response) => {
   response.status(200).json({
     result: lists.map((list) => ({
       id: list.id,
-      name: list.list_name,
+      name: list.status_name,
       tasks: tasks
         .filter((task) => task.todo_id === list.id)
         .map((task) => ({
           id: task.id,
+          status_list_id: list.id,
           name: task.task_name,
           subtasks: subtasks.filter((subtask) => subtask.task_id === task.id),
         })),
@@ -83,13 +84,13 @@ app.get('/list', async (request, response) => {
   });
 });
 
-// Update todo_list name
+// Update status name
 app.put('/list/:id', (request, response) => {
   const id = request.params.id;
-  const name = request.params.list_name;
+  const name = request.params.status_name;
 
   connection.query(
-    'UPDATE todo_list SET list_name = ? WHERE id = ?',
+    'UPDATE status_list SET status_name = ? WHERE id = ?',
     [name, id],
     (error, _result) => {
       if (error) {
@@ -106,11 +107,11 @@ app.put('/list/:id', (request, response) => {
   );
 });
 
-// Delete todo_list
+// Delete status
 app.delete('/list/:id', (request, response) => {
   const id = request.params.id;
 
-  connection.query('DELETE FROM todo_list WHERE id = ?', [id], (error, result) => {
+  connection.query('DELETE FROM status_list WHERE id = ?', [id], (error, result) => {
     if (error) {
       response.status(500).json({
         message: 'Something went wrong',
@@ -171,14 +172,15 @@ app.get('/list/task', (request, response) => {
   });
 });
 
-// Update todo
+// Update task
 app.put('/task/:id', (request, response) => {
   const task_name = request.body.task_name;
-  const id = request.params.id;
+  const id = Number(request.params.id);
+  const status_list_id = request.body.status_list_id
 
   connection.query(
-    'UPDATE task SET task_name = ? WHERE id = ?',
-    [task_name, id],
+    'UPDATE task SET task_name = ?, todo_id = ? WHERE id = ?',
+    [task_name, status_list_id, id],
     (error, _result) => {
       if (error) {
         response.status(500).json({
@@ -189,6 +191,7 @@ app.put('/task/:id', (request, response) => {
       } else {
         response.status(200).json({
           task_name,
+          status_list_id,
           id,
         });
         return;
@@ -221,9 +224,9 @@ app.post('/task/:task_id/subtask', (request, response) => {
   const sub_task_name = request.body.sub_task_name;
   const task_id = request.params.task_id;
 
-  if (sub_task_name === "") {
-    response.send("The field cannot be empty")
-    return
+  if (sub_task_name === '') {
+    response.send('The field cannot be empty');
+    return;
   }
 
   connection.query('INSERT INTO sub_task SET ?', { sub_task_name, task_id }, (error, result) => {
@@ -269,9 +272,8 @@ app.delete('/subtask/:id', (request, response) => {
       });
       console.log('Error: ', error);
     } else if (result.affectedRows === 0) {
-      response.status(404).json("Not deleted")
-    }
-    else {
+      response.status(404).json('Not deleted');
+    } else {
       response.status(200).json();
       console.log('Deleted id: ', id);
     }
