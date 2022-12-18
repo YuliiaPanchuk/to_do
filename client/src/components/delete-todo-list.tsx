@@ -1,21 +1,23 @@
 import React from 'react';
+import { useListContext } from '../context/ListContext';
 
 interface DeleteToDoListProps {
-  onSuccess: () => void;
   id: number;
 }
 
-export function DeleteToDoList({ onSuccess, id }: DeleteToDoListProps) {
+export function DeleteToDoList({ id }: DeleteToDoListProps) {
+  const { fetchLists } = useListContext();
+
   function handleDeleteToDo() {
     fetch(`http://localhost:3001/list/${id}`, {
       method: 'DELETE',
-    }).then(onSuccess);
+    }).then(fetchLists);
   }
 
   return (
     <div>
       <button onClick={handleDeleteToDo}>
-        <i className="fa-regular fa-trash-can" />
+        <i className="fa-regular fa-trash-can fa-xs" />
       </button>
     </div>
   );

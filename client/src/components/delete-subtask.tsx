@@ -1,15 +1,17 @@
 import React from 'react';
+import { useListContext } from '../context/ListContext';
 
 interface DeleteSubtaskProps {
-  onDelete: () => void;
   id: number;
 }
 
-export function DeleteSubtask({ onDelete, id }: DeleteSubtaskProps) {
+export function DeleteSubtask({ id }: DeleteSubtaskProps) {
+  const { fetchLists } = useListContext();
+
   function handleDeleteSubtask() {
     fetch(`http://localhost:3001/subtask/${id}`, {
       method: 'DELETE',
-    }).then(onDelete);
+    }).then(fetchLists);
   }
 
   return (
