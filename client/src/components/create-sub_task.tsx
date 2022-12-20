@@ -16,7 +16,7 @@ export function CreateSubtask({ task_id }: CreateSubtaskProps) {
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
       },
-    });
+    }).then(() => setSubtask(''));
   }
 
   return (
