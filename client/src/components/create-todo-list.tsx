@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useListContext } from '../context/ListContext';
 
 export function CreateToDoList() {
-  const [toDo, setToDo] = useState(''); // when user inserts todo list
+  const [toDo, setToDo] = useState('');
   const { fetchLists } = useListContext();
 
   function createTodoList() {
@@ -29,7 +29,7 @@ export function CreateToDoList() {
         <input
           type="text"
           placeholder="Insert status property"
-          value={toDo} // saving user value to todo state
+          value={toDo}
           onChange={(e) => setToDo(e.target.value)}
         />
       </div>

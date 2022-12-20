@@ -11,7 +11,7 @@ interface ColumnProps {
 export function Column({ list }: ColumnProps) {
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     accept: 'task',
-    drop: () => list, // target/result.name
+    drop: () => list,
     collect: (monitor) => ({
       isOver: monitor.isOver(),
       canDrop: monitor.canDrop(),
@@ -19,7 +19,7 @@ export function Column({ list }: ColumnProps) {
   }));
 
   return (
-    <div className="min-w-[300px] m-2">
+    <div className="min-w-[300px] m-2 h-auto border">
       <div className="flex my-1 ">
         <p className="mr-1 text-xl">{list.name}</p>
         <DeleteToDoList id={list.id} />
