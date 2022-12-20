@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Column } from './components/Column';
 import { CreateToDoList } from './components/create-todo-list';
-import { ListContext, ListProvider, useListContext } from './context/ListContext';
+import { ListProvider, useListContext } from './context/ListContext';
 
 function App() {
   const { lists } = useListContext();
@@ -30,3 +30,5 @@ export default function AppWrapper() {
     </DndProvider>
   );
 }
+
+// Add delete option on Task

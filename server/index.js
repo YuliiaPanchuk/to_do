@@ -125,7 +125,6 @@ app.delete('/list/:id', (request, response) => {
   });
 });
 
-//
 // Create to-do TASK
 app.post('/list/:id/task/', (request, response) => {
   const todo_name = request.body.task_name;
@@ -136,7 +135,7 @@ app.post('/list/:id/task/', (request, response) => {
     return;
   }
 
-  const sql = `INSERT INTO task(task_name, todo_id) VALUES('${todo_name}', ${todo_id})`; // task_name or todo_name???
+  const sql = `INSERT INTO task(task_name, todo_id) VALUES('${todo_name}', ${todo_id})`;
   connection.query(sql, (error, _result) => {
     if (error) {
       response.status(500).json({
@@ -176,7 +175,7 @@ app.get('/list/task', (request, response) => {
 app.put('/task/:id', (request, response) => {
   const task_name = request.body.task_name;
   const id = Number(request.params.id);
-  const status_list_id = request.body.status_list_id
+  const status_list_id = request.body.status_list_id;
 
   connection.query(
     'UPDATE task SET task_name = ?, todo_id = ? WHERE id = ?',
@@ -201,7 +200,7 @@ app.put('/task/:id', (request, response) => {
 });
 
 // Delete specific task
-app.delete('/list/:id/task/:id', (request, response) => {
+app.delete('/task/:id', (request, response) => {
   const id = request.params.id;
 
   connection.query('DELETE FROM task WHERE id = ?', id, (error, result) => {

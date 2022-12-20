@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDrag } from 'react-dnd';
 import { StatusItem, TaskItem } from '../types';
 import { CreateSubtask } from './create-sub_task';
+import { DeleteToDoTask } from './delete-todo-task';
 import { DisplaySubtasks } from './display-sub_tasks';
 
 interface TaskCardProps {
@@ -37,8 +38,8 @@ export function TaskCard({ task }: TaskCardProps) {
   }
 
   return (
-    <div className="flex flex-col rounded-xl shadow border p-3 my-6 " ref={drag}>
-      <div>
+    <div className="flex flex-col rounded-xl shadow border p-3 my-6 ">
+      <div ref={drag}>
         <i className="fa-solid fa-grip handle cursor-grab active:cursor-grabbing my-3 " />
       </div>
 
@@ -52,6 +53,7 @@ export function TaskCard({ task }: TaskCardProps) {
         }}
         onBlur={() => editTask(task.status_list_id)}
       />
+      <DeleteToDoTask id={task.id} />
       <DisplaySubtasks subtasks={task.subtasks} />
       <CreateSubtask task_id={task.id} />
     </div>
