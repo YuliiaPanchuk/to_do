@@ -13,12 +13,12 @@ CREATE TABLE task(
     task_name varchar(255),
     todo_id int NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (todo_id) REFERENCES status_list(id)
+    FOREIGN KEY (todo_id) REFERENCES status_list(id) ON DELETE CASCADE
 );
 CREATE TABLE sub_task(
 	id int NOT NULL AUTO_INCREMENT,
     sub_task_name varchar(255),
     task_id int NOT NULL,
 	PRIMARY KEY (id),
-    FOREIGN KEY (task_id) REFERENCES task(id)
+    FOREIGN KEY (task_id) REFERENCES task(id) ON DELETE CASCADE
 );
