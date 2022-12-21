@@ -3,6 +3,8 @@ const fs = require('fs');
 const mysql = require('mysql');
 const cors = require('cors');
 const util = require('util');
+const { request } = require('http');
+const { response } = require('express');
 
 const app = express();
 app.use(express.json());
@@ -278,6 +280,34 @@ app.delete('/subtask/:id', (request, response) => {
     }
   });
 });
+
+// Update  subtask
+app.put('/subtask/:id', (request, response) => {
+  const sub_task_name = request.body.sub_task_name
+  const id = request.params.id
+  const task_id = request.body.task_id
+
+  connection.query(
+    'UPDATE sub_task SET sub_task_name = ?, task_id = ? WHERE id = ?',
+    [sub_task_name, task_id, id],
+    (error, _result) => {
+      if (error) {
+        response.status(500).json({
+          status: '!OK',
+          message: 'Something went wrong',
+        });
+        console.log('Error:', error);
+      } else {
+        response.status(200).json({
+          sub_task_name,
+          task_id,
+          id,
+        });
+        return;
+      }
+    },
+  )
+})
 
 app.listen(PORT, () => {
   console.log(`Assignment project listening on port ${PORT}`);
