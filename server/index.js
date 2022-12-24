@@ -1,31 +1,22 @@
-const express = require('express');
 const fs = require('fs');
-const mysql = require('mysql');
 const cors = require('cors');
 const util = require('util');
-const { request } = require('http');
-const { response } = require('express');
 
-const app = express();
-app.use(express.json());
-app.use(cors());
+const connect = async () => {
+  try {
+    await mongoose.connect(uri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    })
+    console.log("Connected to MongoDB");
+  } catch (error) {
+    console.error(`An error occured ${error}`);
+  }
+}
 
-const PORT = 3001;
-const baseUrl = 'http://localhost:3001';
+// const execQuery = util.promisify(connection.query.bind(connection));
 
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'root',
-  database: 'todo',
-});
 
-const execQuery = util.promisify(connection.query.bind(connection));
-
-connection.connect((error) => {
-  if (error) throw error;
-  console.log('Connected');
-});
 
 // Create list (To do, in progress, done)
 app.post('/list', (request, response) => {
@@ -308,7 +299,3 @@ app.put('/subtask/:id', (request, response) => {
     },
   )
 })
-
-app.listen(PORT, () => {
-  console.log(`Assignment project listening on port ${PORT}`);
-});

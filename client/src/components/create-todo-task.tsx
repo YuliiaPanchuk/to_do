@@ -26,9 +26,9 @@ export function CreateTodoTask({ list_id }: CreateTodoTaskProps) {
   }
 
   return (
-    <div className="flex">
+    <div className="flex mr-2 min-w-[300px]">
       <input
-        className="mr-2 min-w-[300px] pl-0.5 text-center"
+        className="pl-0.5 text-center"
         type="text"
         placeholder="+ New"
         value={task}
