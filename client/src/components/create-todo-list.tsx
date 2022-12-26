@@ -9,7 +9,7 @@ export function CreateToDoList() {
     fetch('http://localhost:3001/list', {
       method: 'POST',
       body: JSON.stringify({
-        status_name: toDo,
+        list_name: toDo,
       }),
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
@@ -20,7 +20,7 @@ export function CreateToDoList() {
         setToDo('');
         fetchLists();
       })
-      .catch((err) => alert(`Something went wrong to create to do list ${err}`));
+      .catch((error) => alert(`Something went wrong to create to do list ${error}`));
   }
 
   return (

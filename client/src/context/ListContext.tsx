@@ -32,7 +32,7 @@ export function ListProvider({ children }: any) {
 
   useEffect(() => {
     fetchLists();
-  });
+  }, [fetchLists]);
 
   return (
     <ListContext.Provider
