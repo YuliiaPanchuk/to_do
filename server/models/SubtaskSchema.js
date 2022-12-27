@@ -2,16 +2,18 @@ const mongoose = require('mongoose');
 
 const SubtaskSchema = new mongoose.Schema({
   _id: {
-    type: Number,
+    type: String,
   },
   sub_task_name: {
     type: String,
     required: true,
   },
   task_id: {
-    type: Number,
+    type: String,
     required: true,
   },
 });
 
-export const Subtask = mongoose.model('Subtask', SubtaskSchema);
+const Subtask = mongoose.model('Subtask', SubtaskSchema);
+
+module.exports = { Subtask }

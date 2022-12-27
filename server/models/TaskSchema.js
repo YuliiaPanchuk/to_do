@@ -2,14 +2,16 @@ const mongoose = require('mongoose');
 
 const TaskSchema = new mongoose.Schema({
   _id: {
-    type: Number,
+    type: String,
   },
   task_name: {
     type: String,
   },
-  status_id: {
-    type: Number,
+  list_id: {
+    type: String,
   },
 });
 
-export const Task = mongoose.model('Task', TaskSchema);
+const Task = mongoose.model('Task', TaskSchema);
+
+module.exports = { Task }
