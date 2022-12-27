@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { StatusItem } from '../types';
+import { ListItem } from '../types';
 
 export const ListContext = React.createContext<{
-  lists: StatusItem[];
+  lists: ListItem[];
   fetchLists: () => void;
 }>({
   lists: [],
@@ -12,7 +12,7 @@ export const ListContext = React.createContext<{
 });
 
 export function ListProvider({ children }: any) {
-  const [lists, setLists] = useState<StatusItem[]>([]);
+  const [lists, setLists] = useState<ListItem[]>([]);
 
   const fetchLists = useCallback(() => {
     fetch('http://localhost:3001/list', {

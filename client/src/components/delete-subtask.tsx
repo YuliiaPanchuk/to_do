@@ -2,7 +2,7 @@ import React from 'react';
 import { useListContext } from '../context/ListContext';
 
 interface DeleteSubtaskProps {
-  id: number;
+  id: string;
 }
 
 export function DeleteSubtask({ id }: DeleteSubtaskProps) {

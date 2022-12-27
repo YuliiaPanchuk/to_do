@@ -2,7 +2,7 @@ import React from 'react';
 import { useListContext } from '../context/ListContext';
 
 interface DeleteToDoTaskProps {
-  id: number;
+  id: string;
 }
 
 export function DeleteToDoTask({ id }: DeleteToDoTaskProps) {

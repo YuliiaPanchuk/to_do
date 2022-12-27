@@ -1,8 +1,9 @@
 import React from 'react';
 import { useListContext } from '../context/ListContext';
+import { ListItem } from '../types';
 
 interface DeleteToDoListProps {
-  id: number;
+  id: ListItem;
 }
 
 export function DeleteToDoList({ id }: DeleteToDoListProps) {

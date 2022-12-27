@@ -1,14 +1,18 @@
-export type StatusItem = {
-  id: number;
+export type ListItem = {
+  id: string;
   name: string;
   tasks: TaskItem[];
 };
 
 export type TaskItem = {
-  id: number;
-  status_list_id: number;
+  id: string;
+  list_id: string;
   name: string;
   subtasks: SubtaskItem[];
 };
 
-export type SubtaskItem = any;
+export type SubtaskItem = {
+  id: string;
+  name: string;
+  task_id: string;
+};

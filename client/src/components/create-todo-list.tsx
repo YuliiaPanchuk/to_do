@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { useListContext } from '../context/ListContext';
 
 export function CreateToDoList() {
-  const [toDo, setToDo] = useState('');
+  const [list, setList] = useState('');
   const { fetchLists } = useListContext();
 
   function createTodoList() {
     fetch('http://localhost:3001/list', {
       method: 'POST',
       body: JSON.stringify({
-        list_name: toDo,
+        list_name: list,
       }),
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
@@ -17,7 +17,7 @@ export function CreateToDoList() {
     })
       .then((response) => response.json())
       .then(() => {
-        setToDo('');
+        setList('');
         fetchLists();
       })
       .catch((error) => alert(`Something went wrong to create to do list ${error}`));
@@ -29,8 +29,8 @@ export function CreateToDoList() {
         <input
           type="text"
           placeholder="Insert status property"
-          value={toDo}
-          onChange={(e) => setToDo(e.target.value)}
+          value={list}
+          onChange={(e) => setList(e.target.value)}
         />
       </div>
       <button onClick={createTodoList}>
