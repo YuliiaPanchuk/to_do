@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDrag } from 'react-dnd';
-import { StatusItem, TaskItem } from '../types';
+import { ListItem, TaskItem } from '../types';
 import { CreateSubtask } from './create-sub_task';
 import { DeleteToDoTask } from './delete-todo-task';
 import { DisplaySubtasks } from './display-sub_tasks';
@@ -14,7 +14,7 @@ export function TaskCard({ task }: TaskCardProps) {
   const [, drag] = useDrag(() => ({
     type: 'task',
     end: (item, monitor) => {
-      const dropResult = monitor.getDropResult<StatusItem>();
+      const dropResult = monitor.getDropResult<ListItem>();
 
       if (item && dropResult) {
         editTask(dropResult.id);
@@ -22,12 +22,12 @@ export function TaskCard({ task }: TaskCardProps) {
     },
   }));
 
-  function editTask(status_list_id: TaskItem['status_list_id']) {
+  function editTask(list_id: TaskItem['list_id']) {
     fetch(`http://localhost:3001/task/${task.id}`, {
       method: 'PUT',
       body: JSON.stringify({
         task_name: tempTask,
-        status_list_id,
+        list_id: list_id,
       }),
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
@@ -51,7 +51,7 @@ export function TaskCard({ task }: TaskCardProps) {
         onChange={(e) => {
           setTempTask(e.target.value);
         }}
-        onBlur={() => editTask(task.status_list_id)}
+        onBlur={() => editTask(task.list_id)}
       />
       <DeleteToDoTask id={task.id} />
       <DisplaySubtasks subtasks={task.subtasks} />
