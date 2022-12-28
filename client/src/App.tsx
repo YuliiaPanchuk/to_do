@@ -13,8 +13,8 @@ function App() {
       <div className="border-b border-indigo-500">All your todos are here</div>
       <CreateToDoList />
       <div className="flex">
-        {lists.map((list) => (
-          <Column key={list.id} list={list} />
+        {lists.map((list, index) => (
+          <Column key={index} list={list} />
         ))}
       </div>
     </div>
@@ -30,5 +30,3 @@ export default function AppWrapper() {
     </DndProvider>
   );
 }
-
-// Add delete option on Task
