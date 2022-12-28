@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
+import { useListContext } from '../context/ListContext';
 
 interface CreateSubtaskProps {
-  task_id: number;
+  task_id: string;
 }
 
 export function CreateSubtask({ task_id }: CreateSubtaskProps) {
   const [subtask, setSubtask] = useState('');
+  const { fetchLists } = useListContext();
 
   function fetchSubtasks() {
     fetch(`http://localhost:3001/task/${task_id}/subtask`, {
@@ -18,7 +20,11 @@ export function CreateSubtask({ task_id }: CreateSubtaskProps) {
       },
     })
       .then((response) => response.json())
-      .then(() => setSubtask(''));
+      .then(() => {
+        setSubtask('');
+        fetchLists();
+      })
+      .catch((error) => alert(`Something went wrong to create subtask ${error}`));
   }
 
   return (

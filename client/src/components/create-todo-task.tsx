@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useListContext } from '../context/ListContext';
 
 interface CreateTodoTaskProps {
   list_id: number;
@@ -6,6 +7,7 @@ interface CreateTodoTaskProps {
 
 export function CreateTodoTask({ list_id }: CreateTodoTaskProps) {
   const [task, setTask] = useState('');
+  const { fetchLists } = useListContext();
 
   function fetchTasks() {
     fetch(`http://localhost:3001/list/${list_id}/task/`, {
@@ -20,6 +22,7 @@ export function CreateTodoTask({ list_id }: CreateTodoTaskProps) {
       .then((response) => response.json())
       .then(() => {
         setTask('');
+        fetchLists();
       });
   }
 
