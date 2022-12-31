@@ -11,7 +11,9 @@ app.post('/list', async (request, response) => {
 
   // Validate inputs
   if (list_name === '' || typeof list_name !== 'string') {
-    response.status(400).send('Input cannot be empty');
+    response.status(400).json({
+      error: 'Input cannot be empty',
+    });
     return;
   }
 
@@ -97,7 +99,9 @@ app.post('/list/:list_id/task/', async (request, response) => {
   const list_id = request.params.list_id;
 
   if (task_name === '') {
-    response.status(400).send('The field cannot be empty!');
+    response.status(400).json({
+      error: 'The field cannot be empty!',
+    });
     return;
   }
 
