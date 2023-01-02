@@ -27,7 +27,7 @@ describe('Lists', () => {
         .request(server)
         .post('/list')
         .send(list)
-        .end((error, response) => {
+        .end((_error, response) => {
           response.should.have.status(200);
           response.body.should.be.a('object');
           response.body.should.have.property('list_name').eql(list.list_name);
@@ -71,7 +71,7 @@ describe('Lists', () => {
     });
 
     // TASK
-    it('it should get all the lists, tasks', (done) => {
+    it('it should get all the tasks', (done) => {
       let list = new List({
         _id: '404213',
         list_name: 'Shopping',
@@ -148,7 +148,7 @@ describe('Lists', () => {
       chai
         .request(server)
         .get('/list')
-        .end((error, response) => {
+        .end((_error, response) => {
           response.should.have.status(200);
           response.body.should.be.a('object');
           done();
@@ -159,12 +159,12 @@ describe('Lists', () => {
   describe('/PUT/:id list', () => {
     it('it should UPDATE a list by given the id', (done) => {
       let list = new List({ _id: '323429', list_name: 'Backlog' });
-      list.save((error, list) => {
+      list.save((_error, list) => {
         chai
           .request(server)
           .put('/list/' + list._id)
           .send({ list_name: 'To do' })
-          .end((error, response) => {
+          .end((_error, response) => {
             response.should.have.status(200);
             response.body.should.be.a('object');
             response.body.should.have.property('list_name');
@@ -177,7 +177,7 @@ describe('Lists', () => {
   describe('/DELETE/:id list', () => {
     it('it should DELETE a list by given the id', (done) => {
       let list = new List({ _id: '13427', list_name: 'Backlog' });
-      list.save((error, list) => {
+      list.save((_error, list) => {
         chai
           .request(server)
           .delete('/list/' + list._id)
