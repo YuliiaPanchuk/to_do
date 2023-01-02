@@ -1,8 +1,8 @@
-let mongoose = require('mongoose');
+const mongoose = require('mongoose');
 const mocha = require('mocha');
-let chai = require('chai');
-let chaiHttp = require('chai-http');
-let server = require('../server');
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+const server = require('../server');
 const { it } = require('mocha');
 const { Task } = require('../models/TaskSchema');
 
@@ -81,9 +81,9 @@ describe('Tasks', () => {
         chai
           .request(server)
           .delete('/task/' + task._id)
-          .end((err, res) => {
-            res.should.have.status(200);
-            res.body.should.be.a('object');
+          .end((_error, response) => {
+            response.should.have.status(200);
+            response.body.should.be.a('object');
             done();
           });
       });
