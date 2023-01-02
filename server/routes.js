@@ -150,7 +150,9 @@ app.post('/task/:task_id/subtask', async (request, response) => {
   const task_id = request.params.task_id;
 
   if (sub_task_name === '') {
-    response.send('The field cannot be empty');
+    response.status(400).json({
+      error: 'The field cannot be empty',
+    });
     return;
   }
 
