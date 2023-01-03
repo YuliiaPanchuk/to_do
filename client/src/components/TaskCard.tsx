@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useDrag } from 'react-dnd';
+import { useListContext } from '../context/ListContext';
 import { ListItem, TaskItem } from '../types';
 import { CreateSubtask } from './create-sub_task';
 import { DeleteToDoTask } from './delete-todo-task';
@@ -10,6 +11,8 @@ interface TaskCardProps {
 }
 
 export function TaskCard({ task }: TaskCardProps) {
+  const { fetchLists } = useListContext();
+
   const [tempTask, setTempTask] = useState<string>(task.name || '');
   const [, drag] = useDrag(() => ({
     type: 'task',
@@ -33,7 +36,7 @@ export function TaskCard({ task }: TaskCardProps) {
         'Content-type': 'application/json; charset=UTF-8',
       },
     })
-      .then((response) => response.json())
+      .then(fetchLists)
       .catch((error) => console.log(`An error occured ${error}`));
   }
 

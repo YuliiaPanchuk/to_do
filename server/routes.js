@@ -72,8 +72,8 @@ app.get('/list', async (request, response) => {
   });
 });
 
-app.put('/list/:id', async (request, response) => {
-  const id = request.params.id;
+app.put('/list/:_id', async (request, response) => {
+  const id = request.params._id;
   const list_name = request.body.list_name;
 
   await List.findOneAndUpdate({ id }, { list_name });
@@ -126,8 +126,9 @@ app.post('/list/:list_id/task/', async (request, response) => {
 app.put('/task/:_id', async (request, response) => {
   const _id = request.params._id;
   const task_name = request.body.task_name;
+  const list_id = request.body.list_id;
 
-  await Task.findOneAndUpdate({ _id }, { task_name });
+  await Task.findOneAndUpdate({ _id }, { task_name, list_id });
 
   response.status(200).json({
     _id,
