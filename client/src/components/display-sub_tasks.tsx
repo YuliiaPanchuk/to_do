@@ -8,43 +8,48 @@ interface DisplaySubtasksProps {
 }
 
 export function DisplaySubtasks({ subtasks }: DisplaySubtasksProps) {
-  const [tempSubTask, setTempSubtask] = useState('');
+  return (
+    <div className="my-2">
+      {subtasks.map((subtask) => (
+        <Subtask key={subtask.id} subtask={subtask} />
+      ))}
+    </div>
+  );
+}
+
+interface SubtaskProps {
+  subtask: SubtaskItem;
+}
+
+function Subtask({ subtask }: SubtaskProps) {
+  const [tempSubTask, setTempSubtask] = useState(subtask.name);
   const { fetchLists } = useListContext();
 
-  function editSubtask(task_id: number) {
-    fetch(`http://localhost:3001/task/${task_id}`, {
+  function editSubtask() {
+    fetch(`http://localhost:3001/subtask/${subtask.id}`, {
       method: 'PUT',
       body: JSON.stringify({
-        name: tempSubTask,
-        task_id,
+        sub_task_name: tempSubTask,
       }),
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
       },
     })
-      .then((response) => response.json())
-      .then(() => {
-        setTempSubtask('');
-        fetchLists();
-      })
+      .then(fetchLists)
       .catch((error) => console.error(`An error occured ${error}`));
   }
 
   return (
-    <div className="my-2">
-      {subtasks.map((subtask: any, index: any) => (
-        <div key={index} className="flex">
-          <DeleteSubtask id={subtask.id} />
-          <input
-            type="text"
-            value={subtask.name}
-            onChange={(e) => {
-              setTempSubtask(e.target.value);
-            }}
-            onBlur={() => editSubtask(subtask.task_id)}
-          />
-        </div>
-      ))}
+    <div className="flex">
+      <DeleteSubtask id={subtask.id} />
+      <input
+        type="text"
+        value={tempSubTask}
+        onChange={(e) => {
+          setTempSubtask(e.target.value);
+        }}
+        onBlur={editSubtask}
+      />
     </div>
   );
 }
