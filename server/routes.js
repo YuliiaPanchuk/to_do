@@ -76,7 +76,7 @@ app.put('/list/:_id', async (request, response) => {
   const id = request.params._id;
   const list_name = request.body.list_name;
 
-  await List.findOneAndUpdate({ id }, { list_name });
+  await List.findOneAndUpdate({ _id: id }, { list_name });
 
   response.status(200).json({
     id,
@@ -87,7 +87,7 @@ app.put('/list/:_id', async (request, response) => {
 app.delete('/list/:id', async (request, response) => {
   const id = request.params.id;
 
-  await List.deleteOne({ id });
+  await List.deleteOne({ _id: id });
 
   response.status(200).send();
   console.log('Deleted id: ', id);

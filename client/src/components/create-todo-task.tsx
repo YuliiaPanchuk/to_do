@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useListContext } from '../context/ListContext';
+import { TaskItem } from '../types';
 
 interface CreateTodoTaskProps {
-  list_id: number;
+  list_id: string;
 }
 
 export function CreateTodoTask({ list_id }: CreateTodoTaskProps) {
