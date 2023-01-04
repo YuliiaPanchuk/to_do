@@ -12,8 +12,8 @@ interface TaskCardProps {
 
 export function TaskCard({ task }: TaskCardProps) {
   const { fetchLists } = useListContext();
-
   const [tempTask, setTempTask] = useState<string>(task.name || '');
+
   const [, drag] = useDrag(() => ({
     type: 'task',
     end: (item, monitor) => {

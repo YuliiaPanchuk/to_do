@@ -1,7 +1,7 @@
 const express = require('express');
-const cors = require('cors')
+const cors = require('cors');
 const mongoose = require('mongoose');
-const Router = require("./routes");
+const Router = require('./routes');
 const uri = process.env.MONGODB;
 
 const PORT = 3001;
@@ -11,12 +11,12 @@ app.use(cors());
 
 // To make sure your connection was successful
 const db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error: "))
-db.once("open", function () {
-  console.log("Connected successfully");
-})
+db.on('error', console.error.bind(console, 'connection error: '));
+db.once('open', function () {
+  console.log('Connected successfully');
+});
 
-app.use(Router)
+app.use(Router);
 
 async function main() {
   await mongoose.connect(uri);
@@ -26,6 +26,6 @@ async function main() {
   });
 }
 
-main()
+main();
 
-module.exports = app
+module.exports = app;
