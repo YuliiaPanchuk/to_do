@@ -1,8 +1,7 @@
 import React from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { Column } from './components/Column';
-import { CreateToDoList } from './components/create-todo-list';
+import { Column, CreateToDoList } from './components/Column';
 import { ListProvider, useListContext } from './context/ListContext';
 
 function App() {

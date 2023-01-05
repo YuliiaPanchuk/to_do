@@ -2,12 +2,18 @@ import React, { useState } from 'react';
 import { useDrag } from 'react-dnd';
 import { useListContext } from '../context/ListContext';
 import { ListItem, TaskItem } from '../types';
-import { CreateSubtask } from './create-sub_task';
-import { DeleteToDoTask } from './delete-todo-task';
-import { DisplaySubtasks } from './display-sub_tasks';
+import { CreateSubtask, DisplaySubtasks } from './Subtasks';
 
 interface TaskCardProps {
   task: TaskItem;
+}
+
+interface CreateTodoTaskProps {
+  list_id: string;
+}
+
+interface DeleteToDoTaskProps {
+  id: string;
 }
 
 export function TaskCard({ task }: TaskCardProps) {
@@ -41,24 +47,77 @@ export function TaskCard({ task }: TaskCardProps) {
   }
 
   return (
-    <div className="flex flex-col rounded-xl shadow border p-3 my-6 ">
+    <div className="flex flex-col rounded-xl shadow border p-3 my-6 bg-white">
       <div ref={drag}>
-        <i className="fa-solid fa-grip handle cursor-grab active:cursor-grabbing my-3 " />
+        <i className="fa-solid fa-grip handle cursor-grab active:cursor-grabbing my-3" />
       </div>
 
-      <input
-        className="w-40 text-lg bg-transparent handle"
-        type="text"
-        value={tempTask}
-        placeholder={task.name}
-        onChange={(e) => {
-          setTempTask(e.target.value);
-        }}
-        onBlur={() => editTask(task.list_id)}
-      />
-      <DeleteToDoTask id={task.id} />
+      <div className="flex flex-row">
+        <input
+          className="text-lg w-48 bg-transparent handle outline-blue-500"
+          type="text"
+          value={tempTask}
+          placeholder={task.name}
+          onChange={(e) => {
+            setTempTask(e.target.value);
+          }}
+          onBlur={() => editTask(task.list_id)}
+        />
+        <DeleteToDoTask id={task.id} />
+      </div>
       <DisplaySubtasks subtasks={task.subtasks} />
       <CreateSubtask task_id={task.id} />
+    </div>
+  );
+}
+
+export function CreateTodoTask({ list_id }: CreateTodoTaskProps) {
+  const [task, setTask] = useState('');
+  const { fetchLists } = useListContext();
+
+  function fetchTasks() {
+    fetch(`http://localhost:3001/list/${list_id}/task/`, {
+      method: 'POST',
+      body: JSON.stringify({
+        task_name: task,
+      }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    })
+      .then((response) => response.json())
+      .then(() => {
+        setTask('');
+        fetchLists();
+      });
+  }
+
+  return (
+    <div className="flex justify-center mr-2 min-w-[300px]">
+      <input
+        className="pl-0.5 text-center outline-blue-500 bg-transparent"
+        type="text"
+        placeholder="+ New"
+        value={task}
+        onChange={(e) => setTask(e.target.value)}
+        onBlur={fetchTasks}
+      />
+    </div>
+  );
+}
+
+export function DeleteToDoTask({ id }: DeleteToDoTaskProps) {
+  const { fetchLists } = useListContext();
+
+  function handleDelete() {
+    fetch(`http://localhost:3001/task/${id}`, {
+      method: 'DELETE',
+    }).then(fetchLists);
+  }
+
+  return (
+    <div onClick={handleDelete} className="w-px">
+      <i className="fa-regular fa-trash-can fa-xs" />
     </div>
   );
 }
