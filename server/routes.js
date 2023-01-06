@@ -67,6 +67,7 @@ app.get('/list', async (request, response) => {
               id: subtask._id,
               name: subtask.sub_task_name,
               task_id: subtask.task_id,
+              isChecked: subtask.isChecked
             })),
         })),
     })),
@@ -180,8 +181,9 @@ app.post('/task/:task_id/subtask', async (request, response) => {
 app.put('/subtask/:_id', async (request, response) => {
   const _id = request.params._id;
   const sub_task_name = request.body.sub_task_name;
+  const isChecked = request.body.isChecked
 
-  await Subtask.findOneAndUpdate({ _id }, { sub_task_name });
+  await Subtask.findOneAndUpdate({ _id }, { sub_task_name, isChecked });
 
   response.status(200).json({
     _id,

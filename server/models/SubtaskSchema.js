@@ -12,6 +12,9 @@ const SubtaskSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  isChecked: {
+    type: Boolean
+  }
 });
 
 const Subtask = mongoose.model('Subtask', SubtaskSchema);

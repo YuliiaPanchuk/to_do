@@ -16,4 +16,5 @@ export type SubtaskItem = {
   id: string;
   name: string;
   task_id: string;
+  isChecked?: boolean;
 };

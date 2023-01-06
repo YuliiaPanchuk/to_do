@@ -49,7 +49,7 @@ export function Column({ list }: ColumnProps) {
     <div className="max-w-[300px] h-auto rounded-md shadow border p-3 my-6 mx-2 bg-[#ebecf0]">
       <div className="flex flex-wrap my-1">
         <input
-          className="mr-1 text-xl bg-transparent outline-blue-500 rounded-md"
+          className="mr-1 py-px text-xl bg-transparent outline-blue-500 rounded-md"
           style={{ backgroundColor: color }}
           type="text"
           value={tempList}

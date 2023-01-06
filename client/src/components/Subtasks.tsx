@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useListContext } from '../context/ListContext';
 import { SubtaskItem } from '../types';
 import classNames from 'classnames';
@@ -47,14 +47,15 @@ function DeleteSubtask({ id }: DeleteSubtaskProps) {
 
 function Subtask({ subtask }: SubtaskProps) {
   const [tempSubTask, setTempSubtask] = useState(subtask.name);
-  const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(!!subtask.isChecked);
   const { fetchLists } = useListContext();
 
-  function editSubtask() {
+  const saveChanges = useCallback(() => {
     fetch(`${process.env.REACT_APP_API_HOST}/subtask/${subtask.id}`, {
       method: 'PUT',
       body: JSON.stringify({
         sub_task_name: tempSubTask,
+        isChecked: isChecked,
       }),
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
@@ -62,11 +63,11 @@ function Subtask({ subtask }: SubtaskProps) {
     })
       .then(fetchLists)
       .catch((error) => console.error(`An error occured ${error}`));
-  }
+  }, [fetchLists, isChecked, subtask.id, tempSubTask]);
 
-  const checkHandler = () => {
-    setIsChecked(!isChecked);
-  };
+  useEffect(() => {
+    saveChanges();
+  }, [isChecked, saveChanges]);
 
   return (
     <div className="flex border-b justify-around">
@@ -74,7 +75,7 @@ function Subtask({ subtask }: SubtaskProps) {
         className="cursor-pointer"
         type="checkbox"
         checked={isChecked}
-        onChange={checkHandler}
+        onChange={(event) => setIsChecked(event.target.checked)}
       />
       <input
         className={classNames('outline-blue-500 w-48', isChecked ? 'line-through' : 'no-underline')}
@@ -83,7 +84,7 @@ function Subtask({ subtask }: SubtaskProps) {
         onChange={(e) => {
           setTempSubtask(e.target.value);
         }}
-        onBlur={editSubtask}
+        onBlur={saveChanges}
       />
       <DeleteSubtask id={subtask.id} />
     </div>

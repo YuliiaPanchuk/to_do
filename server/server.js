@@ -18,7 +18,7 @@ db.once('open', function () {
 
 app.use(Router);
 
-app.get('/alive', async (request, response) => {
+app.get('/alive', async (_request, response) => {
   response.send("OK");
 });
 
