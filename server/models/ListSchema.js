@@ -9,6 +9,9 @@ const ListSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  color: {
+    type: String
+  }
 });
 
 const List = mongoose.model('List', ListSchema);

@@ -54,6 +54,7 @@ app.get('/list', async (request, response) => {
     result: lists.map((list) => ({
       id: list._id,
       name: list.list_name,
+      color: list.color,
       tasks: tasks
         .filter((task) => task.list_id === list.id)
         .map((task) => ({
@@ -75,12 +76,13 @@ app.get('/list', async (request, response) => {
 app.put('/list/:_id', async (request, response) => {
   const id = request.params._id;
   const list_name = request.body.list_name;
+  const color = request.body.color
 
-  await List.findOneAndUpdate({ _id: id }, { list_name });
+  await List.findOneAndUpdate({ _id: id }, { list_name, color });
 
   response.status(200).json({
     id,
-    list_name,
+    list_name
   });
 });
 
