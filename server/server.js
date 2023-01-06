@@ -18,6 +18,10 @@ db.once('open', function () {
 
 app.use(Router);
 
+app.get('/alive', async (request, response) => {
+  response.send("OK");
+});
+
 async function main() {
   await mongoose.connect(uri);
 

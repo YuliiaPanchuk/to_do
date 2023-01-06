@@ -15,7 +15,7 @@ export function ListProvider({ children }: any) {
   const [lists, setLists] = useState<ListItem[]>([]);
 
   const fetchLists = useCallback(() => {
-    fetch('http://localhost:3001/list', {
+    fetch(`${process.env.REACT_APP_API_HOST}/list`, {
       method: 'GET',
       headers: {
         'Content-type': 'application/json; charset=UTF-8',

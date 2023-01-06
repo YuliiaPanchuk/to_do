@@ -33,7 +33,7 @@ function DeleteSubtask({ id }: DeleteSubtaskProps) {
   const { fetchLists } = useListContext();
 
   function handleDeleteSubtask() {
-    fetch(`http://localhost:3001/subtask/${id}`, {
+    fetch(`${process.env.REACT_APP_API_HOST}/subtask/${id}`, {
       method: 'DELETE',
     }).then(fetchLists);
   }
@@ -51,7 +51,7 @@ function Subtask({ subtask }: SubtaskProps) {
   const { fetchLists } = useListContext();
 
   function editSubtask() {
-    fetch(`http://localhost:3001/subtask/${subtask.id}`, {
+    fetch(`${process.env.REACT_APP_API_HOST}/subtask/${subtask.id}`, {
       method: 'PUT',
       body: JSON.stringify({
         sub_task_name: tempSubTask,
@@ -95,7 +95,7 @@ export function CreateSubtask({ task_id }: CreateSubtaskProps) {
   const { fetchLists } = useListContext();
 
   function fetchSubtasks() {
-    fetch(`http://localhost:3001/task/${task_id}/subtask`, {
+    fetch(`${process.env.REACT_APP_API_HOST}/task/${task_id}/subtask`, {
       method: 'POST',
       body: JSON.stringify({
         sub_task_name: subtask,

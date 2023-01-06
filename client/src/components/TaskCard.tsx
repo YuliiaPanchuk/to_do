@@ -32,7 +32,7 @@ export function TaskCard({ task }: TaskCardProps) {
   }));
 
   function editTask(list_id: TaskItem['list_id']) {
-    fetch(`http://localhost:3001/task/${task.id}`, {
+    fetch(`${process.env.REACT_APP_API_HOST}/task/${task.id}`, {
       method: 'PUT',
       body: JSON.stringify({
         task_name: tempTask,
@@ -76,7 +76,7 @@ export function CreateTodoTask({ list_id }: CreateTodoTaskProps) {
   const { fetchLists } = useListContext();
 
   function fetchTasks() {
-    fetch(`http://localhost:3001/list/${list_id}/task/`, {
+    fetch(`${process.env.REACT_APP_API_HOST}/list/${list_id}/task/`, {
       method: 'POST',
       body: JSON.stringify({
         task_name: task,
@@ -110,7 +110,7 @@ export function DeleteToDoTask({ id }: DeleteToDoTaskProps) {
   const { fetchLists } = useListContext();
 
   function handleDelete() {
-    fetch(`http://localhost:3001/task/${id}`, {
+    fetch(`${process.env.REACT_APP_API_HOST}/task/${id}`, {
       method: 'DELETE',
     }).then(fetchLists);
   }

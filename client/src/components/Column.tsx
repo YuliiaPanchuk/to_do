@@ -27,7 +27,7 @@ export function Column({ list }: ColumnProps) {
   }));
 
   const saveChanges = useCallback(() => {
-    fetch(`http://localhost:3001/list/${list.id}`, {
+    fetch(`${process.env.REACT_APP_API_HOST}/list/${list.id}`, {
       method: 'PUT',
       body: JSON.stringify({
         list_name: tempList,
@@ -84,7 +84,7 @@ export function CreateToDoList() {
   const [list, setList] = useState('');
   const { fetchLists } = useListContext();
   function createTodoList() {
-    fetch('http://localhost:3001/list', {
+    fetch(`${process.env.REACT_APP_API_HOST}/list`, {
       method: 'POST',
       body: JSON.stringify({
         list_name: list,
@@ -127,7 +127,7 @@ function DeleteToDoList({ id }: DeleteToDoListProps) {
   const { fetchLists } = useListContext();
 
   function handleDeleteToDo() {
-    fetch(`http://localhost:3001/list/${id}`, {
+    fetch(`${process.env.REACT_APP_API_HOST}/list/${id}`, {
       method: 'DELETE',
     }).then(fetchLists);
   }
