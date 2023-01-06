@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useListContext } from '../context/ListContext';
 import { SubtaskItem } from '../types';
+import classNames from 'classnames';
 
 interface DisplaySubtasksProps {
   subtasks: SubtaskItem[];
@@ -46,6 +47,7 @@ function DeleteSubtask({ id }: DeleteSubtaskProps) {
 
 function Subtask({ subtask }: SubtaskProps) {
   const [tempSubTask, setTempSubtask] = useState(subtask.name);
+  const [isChecked, setIsChecked] = useState(false);
   const { fetchLists } = useListContext();
 
   function editSubtask() {
@@ -62,20 +64,29 @@ function Subtask({ subtask }: SubtaskProps) {
       .catch((error) => console.error(`An error occured ${error}`));
   }
 
+  const checkHandler = () => {
+    setIsChecked(!isChecked);
+  };
+
   return (
-    <ul className="flex list-disc list-inside">
-      <li>
-        <input
-          className="outline-blue-500"
-          type="text"
-          value={tempSubTask}
-          onChange={(e) => {
-            setTempSubtask(e.target.value);
-          }}
-          onBlur={editSubtask}
-        />
-      </li>
-    </ul>
+    <div className="flex border-b justify-around">
+      <input
+        className="cursor-pointer"
+        type="checkbox"
+        checked={isChecked}
+        onChange={checkHandler}
+      />
+      <input
+        className={classNames('outline-blue-500 w-48', isChecked ? 'line-through' : 'no-underline')}
+        type="text"
+        value={tempSubTask}
+        onChange={(e) => {
+          setTempSubtask(e.target.value);
+        }}
+        onBlur={editSubtask}
+      />
+      <DeleteSubtask id={subtask.id} />
+    </div>
   );
 }
 

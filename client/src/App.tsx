@@ -9,9 +9,8 @@ function App() {
 
   return (
     <div className="container mx-auto p-8 m-10">
-      <div className="border-b border-indigo-500">All your todos are here</div>
       <CreateToDoList />
-      <div className="flex">
+      <div className="flex flex-wrap justify-center">
         {lists.map((list, index) => (
           <Column key={index} list={list} />
         ))}

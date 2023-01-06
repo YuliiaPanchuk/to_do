@@ -47,12 +47,12 @@ export function TaskCard({ task }: TaskCardProps) {
   }
 
   return (
-    <div className="flex flex-col rounded-xl shadow border p-3 my-6 bg-white">
+    <div className="flex flex-col rounded-xl shadow border p-3 my-4 bg-white">
       <div ref={drag}>
-        <i className="fa-solid fa-grip handle cursor-grab active:cursor-grabbing my-3" />
+        <i className="fa-solid fa-grip handle cursor-grab active:cursor-grabbing my-3 fa-xs" />
       </div>
 
-      <div className="flex flex-row">
+      <div className="flex flex-row justify-around">
         <input
           className="text-lg w-48 bg-transparent handle outline-blue-500"
           type="text"
@@ -93,11 +93,11 @@ export function CreateTodoTask({ list_id }: CreateTodoTaskProps) {
   }
 
   return (
-    <div className="flex justify-center mr-2 min-w-[300px]">
+    <div className="flex p-3 min-w-[300px]">
       <input
-        className="pl-0.5 text-center outline-blue-500 bg-transparent"
+        className="p-1 outline-blue-500 bg-transparent hover:bg-[#dadbe2] hover:rounded-sm hover:cursor-text"
         type="text"
-        placeholder="+ New"
+        placeholder="+ Add a card"
         value={task}
         onChange={(e) => setTask(e.target.value)}
         onBlur={fetchTasks}
