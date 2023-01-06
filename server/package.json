@@ -8,10 +8,10 @@
   },
   "name": "server",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "mocha",
-    "start": "node index.js",
+    "start": "node server.js",
     "dev": "npx nodemon server.js"
   },
   "author": "",
