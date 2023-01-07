@@ -201,7 +201,9 @@ app.delete('/subtask/:_id', async (request, response) => {
 });
 
 app.get('/loadSample', async (_, response) => {
-  List.remove({}, () => { });
+  await List.deleteMany();
+  await Task.deleteMany();
+  await Subtask.deleteMany();
 
   const backlogList = new List({
     _id: '001',
@@ -364,16 +366,20 @@ app.get('/loadSample', async (_, response) => {
     isChecked: true,
   });
 
-  await Promise.all(backlogList.save(), toDoList.save(), inProgressList.save(), doneList.save());
-  await Promise.all(
+  await backlogList.save();
+  await toDoList.save();
+  await inProgressList.save();
+  await doneList.save();
+
+  await Promise.all([
     programmingTask.save(),
     shoppingTask.save(),
     gamesTask.save(),
     studyTask.save(),
     foodTask.save(),
     appTask.save(),
-  );
-  await Promise.all(
+  ]);
+  await Promise.all([
     improveSub.save(),
     testSub.save(),
     cleanSub.save(),
@@ -389,7 +395,7 @@ app.get('/loadSample', async (_, response) => {
     subSub.save(),
     colorSub.save(),
     markSub.save()
-  );
+  ]);
 
   response.send("OK");
 });
