@@ -200,7 +200,7 @@ app.delete('/subtask/:_id', async (request, response) => {
   console.log('Deleted id: ', id);
 });
 
-app.get('/loadSample', async () => {
+app.get('/loadSample', async (_, response) => {
   List.remove({}, () => { });
 
   const backlogList = new List({
@@ -390,6 +390,8 @@ app.get('/loadSample', async () => {
     colorSub.save(),
     markSub.save()
   );
+
+  response.send("OK");
 });
 
 module.exports = app;

@@ -22,10 +22,6 @@ app.get('/alive', async (_request, response) => {
   response.send("OK");
 });
 
-app.get('/loadSample', async (request, response) => {
-  response.send()
-})
-
 async function main() {
   await mongoose.connect(uri);
 
